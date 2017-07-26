@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="slf4j-log4j12-1.5.3">
+  <library name="ftpserver">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/libs/slf4j-log4j12-1.5.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/ftpserver.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

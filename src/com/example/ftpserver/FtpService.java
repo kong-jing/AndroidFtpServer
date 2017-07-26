@@ -1,5 +1,6 @@
 package com.example.ftpserver;
 
+import android.util.Log;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -10,6 +11,10 @@ import java.io.OutputStream;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.FtpServerFactory;
 import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpFile;
+import org.apache.ftpserver.impl.FileObserver;
+import org.apache.ftpserver.impl.FtpIoSession;
+import org.apache.ftpserver.impl.ServerFtpStatistics;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
 
@@ -23,6 +28,7 @@ import android.os.IBinder;
 
 public class FtpService extends Service
 {
+	private static final String TAG = "FtpService";
 	static FtpServer server = null;
 	static String port;
 	
@@ -35,15 +41,45 @@ public class FtpService extends Service
 	{
 		SharedPreferences sharedPreferences= getSharedPreferences("ftpserver", Activity.MODE_PRIVATE); 
 		
-		port    = sharedPreferences.getString("port", "2121");
-		dirname = sharedPreferences.getString("dirname", Environment.getExternalStorageDirectory().getPath() + "/ftp"); 
-		System.out.println("dirname = " + dirname);
+		//port    = sharedPreferences.getString("port", "2121");
+		port = "2121";
+		//dirname = sharedPreferences.getString("dirname", Environment.getExternalStorageDirectory().getPath() + "/ftp");
+		dirname = Environment.getExternalStorageDirectory().getPath() + "/ftp";
+		//System.out.println("dirname = " + dirname);
 		filename = dirname + "/myusers.properties";
 				
 		/* Create Ftp Server */
     	FtpServerFactory serverFactory = new FtpServerFactory();
     	ListenerFactory factory = new ListenerFactory();
 
+		/**设置文件上传的回调*/
+		ServerFtpStatistics mServerFtpStatistics =
+				(ServerFtpStatistics) serverFactory.serverContext.getFtpStatistics();
+		mServerFtpStatistics.setFileObserver(new FileObserver() {
+			@Override public void notifyUpload(FtpIoSession ftpIoSession, FtpFile ftpFile, long l) {//上传文件 回调信息
+				File physicalFile= (File) ftpFile.getPhysicalFile();
+				if(physicalFile.exists()){
+					long physicalFileSize=physicalFile.length();
+					Log.e(TAG, "notifyUpload: " + physicalFile.getAbsolutePath() + " size = " + physicalFileSize);
+				}
+			}
+
+			@Override public void notifyDownload(FtpIoSession ftpIoSession, FtpFile ftpFile, long l) {
+
+			}
+
+			@Override public void notifyDelete(FtpIoSession ftpIoSession, FtpFile ftpFile) {
+
+			}
+
+			@Override public void notifyMkdir(FtpIoSession ftpIoSession, FtpFile ftpFile) {
+
+			}
+
+			@Override public void notifyRmdir(FtpIoSession ftpIoSession, FtpFile ftpFile) {
+
+			}
+		});
     	 // set the port of the listener
         factory.setPort(Integer.parseInt(port));
 
@@ -75,6 +111,7 @@ public class FtpService extends Service
         userManagerFactory.setFile(file);
         
         serverFactory.setUserManager(userManagerFactory.createUserManager());
+
         // start the server
         server = serverFactory.createServer(); 
         

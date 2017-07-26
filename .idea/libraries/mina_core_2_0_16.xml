@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="ftpserver-core-1.0.6">
+  <library name="mina-core-2.0.16">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/libs/ftpserver-core-1.0.6.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/mina-core-2.0.16.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

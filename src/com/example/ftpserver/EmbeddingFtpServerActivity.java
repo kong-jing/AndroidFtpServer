@@ -39,44 +39,44 @@ public class EmbeddingFtpServerActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.embedding_ftp_server);
 
-		SharedPreferences sharedPreferences= getSharedPreferences("ftpserver", Activity.MODE_PRIVATE);
-		
-		server_status = (TextView) findViewById(R.id.server_status);
-		server_status.setText(getString(R.string.server_opening));
-		
-		server_ip = (TextView) findViewById(R.id.server_ip);
-		server_ip.setText(getLocalIpAddress()); 
-		    
-		port = sharedPreferences.getString("port", "2121");
-		server_port = (TextView) findViewById(R.id.server_port);
-		server_port.setText(port);
-		
-		homepath = sharedPreferences.getString("path", Environment.getExternalStorageDirectory().getPath() + "/ftp");
-		filename = homepath + "/myusers.properties";
-		file_path = (TextView) findViewById(R.id.path);
-		
-		File destfile = new File(filename); 
-		
-		System.out.println("filename=" + filename);
-		SharedPreferences.Editor editor = sharedPreferences.edit(); 
-		
-		if(destfile.exists()){			
-			file_path.setText(getHomeDirectory());
-			editor.putString("path", getHomeDirectory()); 
-		}else{
-			editor.putString("path", homepath); 
-			file_path.setText(homepath);
-		} 
-					
-		editor.commit();
-		
+		//SharedPreferences sharedPreferences= getSharedPreferences("ftpserver", Activity.MODE_PRIVATE);
+    //
+		//server_status = (TextView) findViewById(R.id.server_status);
+		//server_status.setText(getString(R.string.server_opening));
+    //
+		//server_ip = (TextView) findViewById(R.id.server_ip);
+		//server_ip.setText(getLocalIpAddress());
+    //
+		//port = sharedPreferences.getString("port", "2121");
+		//server_port = (TextView) findViewById(R.id.server_port);
+		//server_port.setText(port);
+    //
+		//homepath = sharedPreferences.getString("path", Environment.getExternalStorageDirectory().getPath() + "/ftp");
+		//filename = homepath + "/myusers.properties";
+		//file_path = (TextView) findViewById(R.id.path);
+    //
+		//File destfile = new File(filename);
+    //
+		//System.out.println("filename=" + filename);
+		//SharedPreferences.Editor editor = sharedPreferences.edit();
+    //
+		//if(destfile.exists()){
+		//	file_path.setText(getHomeDirectory());
+		//	editor.putString("path", getHomeDirectory());
+		//}else{
+		//	editor.putString("path", homepath);
+		//	file_path.setText(homepath);
+		//}
+    //
+		//editor.commit();
+		//
 		mContext = this;
 		Intent serviceIntent;
 		
 		serviceIntent = new Intent(this, FtpService.class);  
         mContext.startService(serviceIntent); 
 		
-        server_status.setText(getString(R.string.server_on)); 
+        //server_status.setText(getString(R.string.server_on));
 	}
 
 	@Override
