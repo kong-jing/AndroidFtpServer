@@ -1,18 +1,5 @@
 package com.example.ftpserver;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import org.apache.ftpserver.FtpServer;
-import org.apache.ftpserver.FtpServerFactory;
-import org.apache.ftpserver.ftplet.FtpException;
-import org.apache.ftpserver.listener.ListenerFactory;
-import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Service;
@@ -20,6 +7,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.os.IBinder;
+
+import org.apache.ftpserver.FtpServer;
+import org.apache.ftpserver.FtpServerFactory;
+import org.apache.ftpserver.ftplet.FtpException;
+import org.apache.ftpserver.ftplet.FtpFile;
+import org.apache.ftpserver.impl.FileObserver;
+import org.apache.ftpserver.impl.FtpIoSession;
+import org.apache.ftpserver.impl.ServerFtpStatistics;
+import org.apache.ftpserver.listener.ListenerFactory;
+import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class FtpService extends Service
 {
@@ -41,9 +45,41 @@ public class FtpService extends Service
 		filename = dirname + "/myusers.properties";
 				
 		/* Create Ftp Server */
-    	FtpServerFactory serverFactory = new FtpServerFactory();
-    	ListenerFactory factory = new ListenerFactory();
+		FtpServerFactory serverFactory = new FtpServerFactory();
+		ListenerFactory factory = new ListenerFactory();
 
+		ServerFtpStatistics mServerFtpStatistics= (ServerFtpStatistics) serverFactory.serverContext.getFtpStatistics();
+		mServerFtpStatistics.setFileObserver(new FileObserver() {
+			@Override
+			public void notifyUpload(FtpIoSession session, FtpFile file, long size) {
+				File physicalFile= (File) file.getPhysicalFile();//获取到上传到ftp服务器的文件
+				if(physicalFile.exists()){
+					long physicalFileSize=physicalFile.length();
+					int i=2;
+				}
+				file.getOwnerName();
+			}
+
+			@Override
+			public void notifyDownload(FtpIoSession session, FtpFile file, long size) {
+
+			}
+
+			@Override
+			public void notifyDelete(FtpIoSession session, FtpFile file) {
+
+			}
+
+			@Override
+			public void notifyMkdir(FtpIoSession session, FtpFile file) {
+
+			}
+
+			@Override
+			public void notifyRmdir(FtpIoSession session, FtpFile file) {
+
+			}
+		});
     	 // set the port of the listener
         factory.setPort(Integer.parseInt(port));
 
@@ -76,8 +112,8 @@ public class FtpService extends Service
         
         serverFactory.setUserManager(userManagerFactory.createUserManager());
         // start the server
-        server = serverFactory.createServer(); 
-        
+        server = serverFactory.createServer();
+
         try {
 			server.start();
 		} catch (FtpException e) {

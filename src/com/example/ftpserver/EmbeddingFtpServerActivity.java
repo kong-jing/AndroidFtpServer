@@ -1,5 +1,15 @@
 package com.example.ftpserver;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.Environment;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextView;
+
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,16 +20,6 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.os.Environment;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
 
 public class EmbeddingFtpServerActivity extends Activity { 
 	static TextView server_status;
